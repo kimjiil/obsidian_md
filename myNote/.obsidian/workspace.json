@@ -1,0 +1,164 @@
+{
+  "main": {
+    "id": "9dc76fa34decd4f5",
+    "type": "split",
+    "children": [
+      {
+        "id": "2c3140ba8bdee7f6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e0b4b33f697ff5d7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "DeepMapping2/DeepMapping2.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "a76c2604e967d292",
+    "type": "split",
+    "children": [
+      {
+        "id": "fbf965e0ee338162",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ff4a9961e3b769f1",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "c5a79ab1220d1c7c",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "9cf3452d0f0015ff",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 244.5
+  },
+  "right": {
+    "id": "e24d0222f4a0ca9e",
+    "type": "split",
+    "children": [
+      {
+        "id": "328ef2b4f9c85297",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9479c61b6a4028ac",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "DeepMapping2/DeepMapping2.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "ac8e9330de1de52c",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "DeepMapping2/DeepMapping2.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "bc827394593ccba2",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "5c4e8f0beade535e",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "DeepMapping2/DeepMapping2.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:퀵 스위처 열기": false,
+      "graph:그래프 뷰 열기": false,
+      "canvas:새 캔버스 만들기": false,
+      "daily-notes:오늘의 데일리 노트 열기": false,
+      "templates:템플릿 삽입": false,
+      "command-palette:명령어 팔레트 열기": false
+    }
+  },
+  "active": "e0b4b33f697ff5d7",
+  "lastOpenFiles": [
+    "DeepMapping1/DeepMapping1.md",
+    "3.md",
+    "[3].md",
+    "45], [52], [49], [20], [19], [29], [18.md",
+    "[45.md",
+    "DeepMapping1/Pasted image 20240215111108.png",
+    "DeepMapping2/Pasted image 20240215103333.png",
+    "DeepMapping2/DeepMapping2.md",
+    "DeepMapping1",
+    "Welcome.md",
+    "DeepMapping2/Pasted image 20240215102644.png",
+    "DeepMapping2"
+  ]
+}
