@@ -16,7 +16,7 @@
 
 - 딥러닝의 기술의 발전에도 불구하고 특히 등록 및 매핑과 같은 computur vision의 기하학적 측면의 개선은 완전히 입증되지 않음
 - deep semantic representation이 기하학적 특성을 정확하게 추정하고 모델링하는데 한계가 있음
-![[Pasted image 20240215111108.png | 400]]
+
 
 - deep learning과 geometric vision problem([45], [52], [49], [20], [19], [29], [18])을 통합하기 위해 다양한 연구를 시도중임
 - ([26], [9], [20]) 방법들은 주변 환경의 맵을 representation으로 가지고 있는 DNN을 학습하여 camera pose를 추정하려고 한다.
@@ -25,8 +25,152 @@
 - 이 논문의 핵심은 DNN이 기하학적 문제에 대해서, 특히 registration과 mapping에서얼마나 잘 일반화될 것인가
 	- Semantic task은 DNN에서 크게 이득을 보고 있는데 해당 문제들은 대부분 경험적으로 정의되어 많은 데이터를 통해 통계적으로 모델링되어 해결된다.
 	- 하지만 많은 기하학적 문제들은 이론적으로 정의됨 -> 통계적 모델링을 통한 해결책은 정확도 측면에서 한계가 있음
+![[Pasted image 20240215111108.png | 400]]
+- 일반적으로 손으로 엔지니어링된 mapping/registration process를 DNN으로 변환하고 학습하여 해결한다. 그러나 훈련된 DNN이 다른 장면으로 일반화되기를 반드시 기대하는 것은 아닙니다.
+- 이것을 의미 있게 만들기 위해 ([26], [9], [20])의 지도 학습과 달리, registration quality를 반영하는 적절한 비지도 손실 함수를 정의해야 한다. 이러한 아이디어로 Figure 1에서 좋은 결과를 보여줌
+	- unsupervised 방식으로 학습하는 2개의 end-to-end DNN 인 DeepMapping을 제안
+	- continuous regression 문제를 DNN과 unsupervised Loss를 사용하여 registration 정확도를 희생하지 않고 이진 분류로 변환함
 
+---
+
+## 2. Related Work
+ - pairwise point cloud registration 방법은 크게 local과 global 2가지로 분류된다.
+### Pairwise local registration
+- local 방법은 두 point cloud사이의 coarse initial alignment를 가정하고 registration을 정밀화하기위해 transformation을 반복적으로 업데이트함
+- 이러한 방법들은 Iterative Closest Point(ICP) 알고리즘 ([6], [10], [34])과 확률 기반 접근 방법 ([23], [31], [12])가 있다.
+- local 방법은 수렴 범위가 제한되어 있어 warm start 또는 좋은 초기화가 필요함
+### Pairwise global registration
+- global 방법([46], [3], [30], [50], [28], [14])은 warm start에 의존하지 않고 임의의 초기 자세를 가진 point clouds에 수행할 수 있다.
+- 대부분의 global 방법은 두 point cloud에서 feature descriptors를 추출한다. 이러한 descriptor는 relative pose estimation을 위한 3D-to-3D 대응을 만들기 위해 사용된다.
+- 강건한 추정 방법, 예를 들어 RANSAC[17]은 일반적으로 mismatch를 다루기 위해 사용된다.
+- feature descriptor들은 FPFH[35], SHOT[43], 3D-SIFT[38], NARF[40], PFH[36], spin images[25]와 같이 hand-crafted이거나 3DMatch[48], PPFNet[13], 3DFeatNet[24]와 같은 학습 기반 descriptor이다.
+
+### Multiple registration
+- 몇개의 방법([42], [16], [22], [44], [11])은 multiple point clouds registration을 제안한다. 어떤 한 방법은 모델에 등록된 이전 point clouds에 점진적으로 새로운 point cloud들을 추가한다.
+- 점진적 registration 방법의 단점은 registration error도 똑같이 점진적으로 쌓인다.
+- 이러한 누적된 에러, drift 모든 센서 pose의 그래프 상의 global cost function을 최소화함으로써 완화될 수 있다([11], [42]).
+
+### DeepLearning Approaches
+- 최근 연구들은 mapping과 localization을 통합하는 아이디어를 연구한다. 
+- ([45], [52])는 depth와 로봇 움직임 사이의 내재적 연결 관계를 활용하는 비지도 학습 방법이다.
+- 이 아이디어는 ([7], [49], [47], [29])에서 visual odometry와 SLAM 문제를 해결하기 위해 deep learning을 사용한다.
+	- CodeSLAM[7]은 대응하는 depth 이미지에 대한 VAE를 사용하여 dense geometry를 표현하며 bundle adjustment중에 최적화된다.
+- [18]은 메모리 시스템을 사용하여 해당 장면의 representation을 기억하고 부분적으로 관측된 환경에서 pose를 예측하는 generative temporal model이다.
+	- 이 방법과 DeepMapping은 모두 관측된 데이터로 붙 센서 자세를 추론할 수 있지만, [18]은 메모리에 로딩하기 위한 지도 학습 단계가 필요하지만 deepmapping은 완전히 비지도 학습이다.
+- ([20], [32])방법들은 RNN을 사용하여 미리 지도된 환경에서 이미지 시퀀스를 통해 환결을 모델링한다.
+	- MapNet[20]은 RGB-D SLAM 문제를 해결하기 위한 RNN을 개발함, 상대적으로 작은 해상도를 가진 이산화된 공간에서 템플릿 매칭을 사용하여 카메라 센서의 위치를 추정함
+
+- 다른 관련 방법([26], [9])는 DNNs이 학습된 이미지와 같은 환경에서 camera pose를 추정하도록 학습해서 camera localization 문제를 해결함
+- DeepMapping의 training과정은 point cloud registration 문제를 해결하는 것과 동일하며 한번 training된 후에는 DNN이 다른 환경에서 일반화되지는 않는다.
+
+---
+
+## 3.Method
+### 3.1. Overview
+- $\mathcal{S}=\{ S_{i} \}^{K}_{i=1}$ 가 $D$차원 공간에서 Lidar Scanner로 얻어진 $K$개의 input point clouds이고 $i$ 번째 point cloud를 $S_{i}$이라고 하고 $N_{i} \times D$ 행렬 형태로 표현된다. $N_{i}$는 해당 로컬 프레임에 포함된 point수를 나타낸다.
+- $K$개의 point cloud가 주어지면 모든 point cloud를 한개의 공통 좌표에 등록하는 것이 목표이고 각각의 point cloud $S_{i}$에 대한 sensor pose $\mathbf{T}={T_{i}}^{K}_{i=1}$ 추정한다. 여기서 $T_{i} \in SE(D)$
+
+- 전통적인 방법([50], [16])은 이런 최적화 문제를 공식화하여 직접적으로 최적의 sensor pose $\mathbf{T}$를 찾음으로써 Loss 함수를 최소화 합니다.
+- $$ \mathbf{T}^{*}(\mathbf{S}) = \underset{T}{argmin} \, \mathcal{L}(\mathbf{T}, \mathbf{S}) \quad\quad\quad (1)$$
+- 여기서 $\mathcal{L}(\mathbf{T}, \mathbf{S})$ 는 registration quality를 평가하는 objective function이다.
+- 직접적으로 $\mathbf{T}$를 최적화 하는 대신 input point cloud $\mathbf{S}$에 대한 sensor pose $\mathbf{T}$를 추정하기 위한 보조 함수 $f_{\theta}(\mathbf{S})$로 모델링된 DNN을 사용한다. 여기서 $\theta$는 최적화 가능한 보조 변수이다.
+- 그런 다음 pose $S_{i}$는 global pose $G_{i}$로 매핑하는 변환 행렬에 의해 변환된다.
+
+- registration problem을 다음 새로운 objective function을 최소화함으로써 optimal network parameter를 찾는 문제로 재공식화 한다.
+- $$(\theta^{*}, \phi^{*}) = \underset{\theta, \phi}{argsmin} \, \mathcal{L}_{\phi} (f_\theta(\mathbf{S}), \mathbf{S}) \quad \quad \quad (2)$$
+- 여기서 $\mathcal{L}_{\phi}$는 비지도로 학습가능한 objective function이다(Sec 3.2와 3.4에서 설명).
+
+
+![[Pasted image 20240216135102.png]]
+- Figure 2에서 DeepMapping의 pipeline을 나타낸다. 여기서 가장 핵심은 2개의 network이다.
+	- point cloud $S_{i}$로 부터 sensor pose $T_{i}$를 추정하는 localization network (L-Net)
+	- registration quality를 평가하는 occupancy map network (M-Net)
+- L-Net 은 공식 (2)에 나타낸 $f_{\theta} \; : \; S_{i} \mapsto \; T_{i}$ 함수이다. 여기서 parameter $\theta$는 모든 point cloud에서 공유된다. 
+- 글로벌 좌표인 $G_{i}$는 L-Net을 통해 추론된 sensor pose를 사용하여 얻고 변환된 point cloud로 부터 먼저 occupied와 unoccupied된 location을 샘플링한다.
+- 이렇게 샘플된 위치를 M-Net에 입력하고 L-Net의 registration 성능을 평가한다.
+- M-Net은 입력 위치가 차지된 확률을 예측하는 이진 분류 네트워크이다.
+	- M-Net은 학습가능한 매개변수 $\phi$ 를 가지는 함수이다.
+	- 이러한 occupancy probability들은 변환된 point clouds의 global occupancy consistency을 측정하는 비지도 Loss $\mathcal{L}_{\phi}$(식 (2)에 있음)를 계산하는데 사용하므로 registration quailty을 반영한다.
+
+- 식(1) 에서 식(2)으로 변환하는 것은 문제의 차원 및 복잡성을 증가시킬수 있는데, 여기서 간단한 1차원 버전을 사용하고 보조함수로써 DNN을 사용한다.
+	- DNN은 gradient-based 방법을 사용하여 고차원 공간에서 최적화하는 것이 원래의 문제를 직접 최적화하는 것보다 더 빠르고 더나은 수렴을 가능하게 한다.
+
+---
+### 3.2. DeepMapping Loss
+- M-Net $m_{\phi}$를 사용하여 registration quality를 평가하는 비지도 손실 함수 $\mathcal{L}_{\phi}$를 정의한다.
+-  M-Net은 연속적인 occupancy map $m_{\phi} : \mathbb{R}^{D} \to [0, 1]$이다.
+	- global 좌표를 해당하는 occupancy 확률에 매핑한다.
+	- $\phi$는 학습가능한 매개변수이다.
+- 만약 global frame에서 좌표가 위치가 차지되있는지 아닌지를 나타내는 binary occupancy label y와 연관되어 있으면 예측된 occupancy 확률 $p$와 라벨 y간의 global 좌표의 loss를 BCE $B$를 통해 계산된다.
+- $$B[p, y]=-y \, log(p)-(1-y)log(1-p) \quad\quad\quad (3)$$
+- label y를 라벨링하는 방법은 이미 point cloud가 전역적으로 정렬된 상황을 고려한다. 이러한 경우에 라이다 스캐너의 물리적 원리로 인해 적연 프레임에서 스캔된 모든 점이 차지되었다고 표시되어야 하므로 Label 1로 표시된다.
+
+ ![[Pasted_image_20240216145400.png | Figure 3. 샘플링 방법과 self-contradictory occupancy status를 나타낸다. 파란색과 주황색은 각 두 point cloud를 나타내며 X표는 샘플링된 미차지(unoccupied) 점을 나타낸다. (a)와 (b)는 각각 올바르게 정렬되고 잘못 정렬된 정렬된 point cloud를 보여준다. (b)의 빨간 화살표는 self-contradictory status를 가진 점을 표시한다.]] 
+- 스캐너 중심과 스캐너로 관측된 모든 점 사이, 즉 시야 선상에 있는 점은 label 0으로 표시되야 된다. Figure 3은 라이다 스캐너를 위해 미차지된 점을 샘플링하는 메커니즘을 보여준다. 점선은 스캐너에서 방출된 레이저 빔을 나타낸다.
+- $G_{i}$로 부터 샘플링된 point의 집합을 $s(G_{i})$으로 나타낸다.
+	- $G_{i}$는 이러한 레이저 빔 위에 있는 점들 나타내고 X표시로 표현한다.
+	- 이러한 점들은 미차지된 위치를 나타내는 label 0으로 나타낸다.
+
+- binary cross entropy와 샘플링 함수를 결합하여 식 (2)에서 사용되는 loss는 모든 point cloud의 모든 위치에 대한 binary cross entropy의 평균으로 정의된다:
+- $$\mathcal{L}_{cls} = \frac{1}{K}\sum\limits^{K}_{i=1} B[m_{\phi}(G_{i}, \, 1)] + B[m_{\phi}(s(G_{i})), \, 0] \quad\quad\quad (4)$$
+- 여기서 $G_{i}$는 L-Net parameter $\theta$의 함수이고 $B[m_{\phi}(G_{i}), 1]$는 모든 point cloud $G_{i}$에 대한 평균 BCE error를 나타낸다.
+- $B[m_{\phi}(s(G_{i})), 0]$은 point cloud $G_{i}$에 대응하는 샘플링된 미차지(unoccupied) 위치에 대한 평균 BCE error를 의미한다.
+
+- Figure 3에서 식 (4)에 대한 직관을 나타낸다.
+	- figure 3의 (a)처럼 registration이 정확하면 loss function은 더 적은 값에 도달한다.
+	- 반면에 figure 3의 (b)처럼 잘못 정렬된 point clouds는 self-contradictory occupany status를 초래하므로 loss function은 큰 값을 가진다.
+
+- 식 (4)의 loss는 point cloud의 내재된 occupancy 상태에 의존하기 때문에 외부에서 라벨링된 ground truth에 의존하지 않는 unsupervised 학습이다.
+- 최소화를 위해 Loss function $\mathcal{L}_{cls}$이 $\theta$와 $\phi$  모두에 대해 미분 가능하기 때문에 gradient 기반 최적화를 사용한다.
+
+- 이전 연구들에서 이산형 occupancy map을 사용하는 것과 달리 M-Net은 소수점 좌표를 직접 입력하여 연속적인 occupancy map을 생성하기 때문에 임의의 스케일과 해상도로 환경을 표현할 수 있다는 장점이 있다.
+
+---
+
+### 3.3. Network Achitecture
+#### L-Net
+- Localization Network인 L-Net의 목표는 global frame에서 sensor pose $T_{i}$를 추론하는 것이다. 이 모듈은 입력 point cloud $S_{i}$의 형식에 따라 달라진다.
+- 공간 관계 보존된 이미지 형태의 데이터
+	- $S_{i}$가 depth나 disparity 이미지로 부터 생성된 구조화된 point cloud라면 $S_{i}$는 인접한 점 사이의 공간 관계가 보존된 포인트 배열로 구성된다.
+	- 이러한 공간 관계가 보존된 $S_{i}$는 CNN을 적용하여 point cloud의 feature vector를 추출하고 local feature를 global feature로 집계하기 위해 global pooling layer를  사용한다.
+- 공간적인 순서 없이 정렬되지 않은 Raw point cloud
+	- point cloud로 부터 feature를 추출하기 위해 PointNet[33] 구조를 채택한다.
+	- [33]에 있는 input과 feature transformation을 제거하고 각 D차원 포인트 좌표를 고차원 feature space에 매핑하는 shared MLP를 사용한다.
+	- 모든 point에 대해 global pooling layer가 적용되어 feature를 집계하고 추출된 latent feature vector는 sensor의 pose 자유도를 출력하는 MLP로 처리한다.
+
+#### M-Net
+- occupancy map network M-Net은 global space에서 위치 좌표를 입력으로 받아 각 입력 위치에 대해 대응되는 occupancy 확률을 예측하는 이진 분류 network이다.
+	- M-Net은 모든 point에 대해 공유되고 sigmoid 함수의 1개 채널 출력을 가지고 D채널의 입력을 갖는 MLP이다.
 - 
+
+### 3.4. Extension to Lidar SLAM
+- 식 (4)의 loss function은 입력 point cloud $\mathbf{S}$를 시간적으로 정렬된 순서가 아닌 비정렬된 스캔의 집합으로 처리한다. 
+- 일부 apps에서는 시간 정보를 사용할 수 있는데 Lidar SLAM은 레이저 스캐너를 사용하여 미지의 환경을 탐색하고 시간 t에서 서로 다른 순서의 point cloud를 캡처한다.
+
+- DeepMapping을 확장하여 이런 시간적 관계를 활용함. 시간적으로 연속적인 point cloud는 서로 비슷한 point cloud를 많이 가지고 있기 때문에 잘 겹쳐질 것이다. 
+	- 시간적으로 서로 가까운 point cloud간의 기하적 제약(constraints)를 활용한다.
+	- 전역 좌표계에서 두 point cloud X와 Y 사이의 거리를 측정하는 metric으로 chamfer distance를 사용한다.
+	- $$
+\begin{split}
+d(X,Y) &= \frac{1}{|X|}\sum\limits_{x\in X} \underset{y \in Y}{min}||x-y||_{2}
+\\     &+ \frac{1}{|Y|}\sum\limits_{y \in Y} \underset{x \in X}{min}||x - y||_{2}
+\end{split} \quad \quad \quad (5)
+$$
+	- chamfer distance는 한 point cloud의 각 point에서 다른 point cloud의 가장 가까운 점까지의 양방향 평균 거리를 측정한다.
+	- chamfer distance $d(G_{i}, G_{j})$의 최소화는 두 point cloud $G_{i}$와 $G_{j}$사이가 pairwise alignment된다.
+	- chamfer 거리를 DeepMapping에 통합하기 위해 식 (2)의 objective 함수를 다음과 같이 수정한다
+	- $$(\theta^{*},\phi^{*}) = \underset{\theta, \phi}{argmin} \, \mathcal{L_{cls}}+\lambda \mathcal{L}_{ch}$$
+	- 여기서 $\lambda$는 두 Loss 함수의 균형을 잡기 위한 hyperparameter이고 $\mathcal{L}_{ch}$는 각 point cloud $G_{i}$와 시간적 이웃인 $G_{j}$ 사이의 평균 chamfer distance로 정의된다.
+	- $$\mathcal{L}_{ch}=\sum\limits^{K}_{i=1}\sum\limits_{j \in \mathcal{N}(i)} d(G_{i}, G_{j}) \quad\quad\quad (7)$$
+---
+
+### 3.5. Warm Start
+- 식 (6)을 네트워크 매개변수의 무작위 초기화(즉, Cold start)로 최적화하는 것은 실제 app에서 수렴이 오래걸리기 때문에 좋지 않다.
+	- 따라서 모든 point cloud를 incremental ICP와 같은 기존 방법으로 미세 정합한 후에 Warm start 방식으로 DeepMapping을 학습한다.
+
+
+
+
 
 
 

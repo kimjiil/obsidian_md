@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "DeepMapping2/DeepMapping2.md",
+                "file": "DeepMapping1/DeepMapping1.md",
                 "mode": "source",
                 "source": false
               }
@@ -64,6 +64,14 @@
               "type": "bookmarks",
               "state": {}
             }
+          },
+          {
+            "id": "ea953f56dcfb8715",
+            "type": "leaf",
+            "state": {
+              "type": "mk-path-view",
+              "state": {}
+            }
           }
         ]
       }
@@ -85,7 +93,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "DeepMapping2/DeepMapping2.md",
+                "file": "DeepMapping1/DeepMapping1.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +110,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "DeepMapping2/DeepMapping2.md",
+                "file": "DeepMapping1/DeepMapping1.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,16 +133,24 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "DeepMapping2/DeepMapping2.md"
+                "file": "DeepMapping1/DeepMapping1.md"
               }
             }
+          },
+          {
+            "id": "abe2518f6c7f33d5",
+            "type": "leaf",
+            "state": {
+              "type": "advanced-tables-toolbar",
+              "state": {}
+            }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -143,19 +159,25 @@
       "canvas:새 캔버스 만들기": false,
       "daily-notes:오늘의 데일리 노트 열기": false,
       "templates:템플릿 삽입": false,
-      "command-palette:명령어 팔레트 열기": false
+      "command-palette:명령어 팔레트 열기": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
   "active": "e0b4b33f697ff5d7",
   "lastOpenFiles": [
+    "DeepMapping1/Pasted_image_20240216145400.png",
     "DeepMapping1/DeepMapping1.md",
+    "DeepMapping1/Pasted image 20240216135102.png",
+    "Spaces/Home/무제 파일.md",
+    "Spaces/Home",
+    "Spaces",
+    "DeepMapping2/DeepMapping2.md",
     "3.md",
     "[3].md",
     "45], [52], [49], [20], [19], [29], [18.md",
     "[45.md",
     "DeepMapping1/Pasted image 20240215111108.png",
     "DeepMapping2/Pasted image 20240215103333.png",
-    "DeepMapping2/DeepMapping2.md",
     "DeepMapping1",
     "Welcome.md",
     "DeepMapping2/Pasted image 20240215102644.png",
