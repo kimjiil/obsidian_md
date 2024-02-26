@@ -1,5 +1,4 @@
-
-# DeepMapping: Unsupervised Map Estimation From Multiple Point Clouds
+# DeepMapping: Unsupervised Map Estimation From Multiple Point Clouds 논문 요약
 ---
 
 ## Abstract
@@ -22,7 +21,7 @@
 - ([26], [9], [20]) 방법들은 주변 환경의 맵을 representation으로 가지고 있는 DNN을 학습하여 camera pose를 추정하려고 한다.
 - ([45], [52])의 방법들은 depth와 움직임 간의 내재적인 관계를 활용하는 비지도 학습 접근법을 제안한다.
 
-- 이 논문의 핵심은 DNN이 기하학적 문제에 대해서, 특히 registration과 mapping에서얼마나 잘 일반화될 것인가
+- 이 논문의 핵심은 DNN이 기하학적 문제에 대해서, 특히 registration과 mapping에서 얼마나 잘 일반화될 것인가
 	- Semantic task은 DNN에서 크게 이득을 보고 있는데 해당 문제들은 대부분 경험적으로 정의되어 많은 데이터를 통해 통계적으로 모델링되어 해결된다.
 	- 하지만 많은 기하학적 문제들은 이론적으로 정의됨 -> 통계적 모델링을 통한 해결책은 정확도 측면에서 한계가 있음
 ![[Pasted image 20240215111108.png | 400]]
@@ -36,7 +35,7 @@
 ## 2. Related Work
  - pairwise point cloud registration 방법은 크게 local과 global 2가지로 분류된다.
 ### Pairwise local registration
-- local 방법은 두 point cloud사이의 coarse initial alignment를 가정하고 registration을 정밀화하기위해 transformation을 반복적으로 업데이트함
+- local 방법은 두 point cloud사이의 coarse initial alignment를 가정하고 registration을 정밀화하기 위해 transformation을 반복적으로 업데이트함
 - 이러한 방법들은 Iterative Closest Point(ICP) 알고리즘 ([6], [10], [34])과 확률 기반 접근 방법 ([23], [31], [12])가 있다.
 - local 방법은 수렴 범위가 제한되어 있어 warm start 또는 좋은 초기화가 필요함
 ### Pairwise global registration
@@ -112,7 +111,7 @@
 	- 이러한 점들은 미차지된 위치를 나타내는 label 0으로 나타낸다.
 
 - binary cross entropy와 샘플링 함수를 결합하여 식 (2)에서 사용되는 loss는 모든 point cloud의 모든 위치에 대한 binary cross entropy의 평균으로 정의된다:
-- $$\mathcal{L}_{cls} = \frac{1}{K}\sum\limits^{K}_{i=1} B[m_{\phi}(G_{i}, \, 1)] + B[m_{\phi}(s(G_{i})), \, 0] \quad\quad\quad (4)$$
+- $$\mathcal{L}_{cls} = \frac{1}{K}\sum\limits^{K}_{i=1} B[m_{\phi}(G_{i}), \, 1] + B[m_{\phi}(s(G_{i})), \, 0] \quad\quad\quad (4)$$
 - 여기서 $G_{i}$는 L-Net parameter $\theta$의 함수이고 $B[m_{\phi}(G_{i}), 1]$는 모든 point cloud $G_{i}$에 대한 평균 BCE error를 나타낸다.
 - $B[m_{\phi}(s(G_{i})), 0]$은 point cloud $G_{i}$에 대응하는 샘플링된 미차지(unoccupied) 위치에 대한 평균 BCE error를 의미한다.
 
@@ -172,7 +171,7 @@ $$
 
 
 
-
+## Reference
 
 ---
 [1]: Particle swarm optimization. [GitHub link](https://github.com/iralabdisco/pso) registration. 6
@@ -280,3 +279,54 @@ $$
 [51]: Qian-Yi Zhou, Jaesik Park, and Vladlen Koltun. Open3D: A modern library for 3D data processing. arXiv:1801.09847, 2018. 7
 
 [52]: Tinghui Zhou, Matthew Brown, Noah Snavely, and David G Lowe. Unsupervised learning of depth and ego-motion from video. In IEEE Intl. Conf. Comp. Vision and Pattern Recog., volume 2, page 7, 2017. 1, 2
+
+
+
+# Work
+
+## 2024.02.21
+- 179호기에서 4층 라이다 데이터 수집("E:\Data\syswin\20240221-131246")
+	- 총 11,033개 cloud point / 360$^o$ / 1083개 points / 34hz
+		- ![[Pasted image 20240221150608.png]]
+	- data format
+		- local X, local Y, local degree, start degree, end, degree, n_points, distances~ ...
+	- ![[Pasted image 20240221145523.png | local 정보로 라이다를 뿌려봄 | 500]]
+	- ![[Pasted image 20240221145959.png | local이 흔들려서 같은 벽에대한 Lidar point가 많이 흔들림 | 250]]
+	- 현재 가진 데이터수가 너무 많아서 34hz의 1/30 , 1083개 point 중에 1/4만 사용
+		- point clouds 11,083개 -> 369개 / 1038개 point중에서 270개  shape :[369, 270, 2]
+		- training tact time : 1 epoch 당 3초 
+
+## 2024.02.22
+- 4층에서 가진 cloud points로 7500 epoch 학습 결과물 0 epoch -> 7500 epoch![[global_map_pose_e_40.png | 400]]![[global_map_pose_e_7500.png | 400]]
+- 학습된 deepmapping 모델에서 localization network만 가지고 새로운 local pose가 들어왔을때 global pose를 estimation 
+	- 빨간색 점은 학습된 point clouds / 검은색 점은 새로운 point clouds
+- ![[Pasted image 20240223113559.png]]![[Pasted image 20240223113638.png]]
+- 새로운 local pose에 대한 global pose가 안좋은 성능을 가짐
+
+## 2024.02.23
+### Todo 
+- Deepmapping으로 생성된 Map과 실제 Map과 비교 (정이사님 질문)
+	- 벽두께, 스케일 비교
+		- 실제 맵과 비교를 위해서 Lidar point clouds를 .pgm 형식의 Map으로 변환하는 과정이 필요함(코드 서칭중..)
+	- Deepmapping으로 생성된 Map내의 노이즈(움직이는 사람, 물체) 제거 방법?
+- 현재 학습된 DeepMapping 모델에서 Localization Net으로 새로운(학습에 사용되지 않은) local pose를 global pose로 변환하면 위 결과처럼 안좋음
+	- 학습하는 과정에서 Localization Net의 일반화가 안됨
+		1. Deep Closest Point으로 정합(registration)된 Map point clouds에 새로운 local point cloud를 point matching하는 방법으로 대체
+		2. Localization Map을 학습할때 일반화 되도록 학습
+
+#### ROS Map File 
+- .pgm 파일
+	- 맵의 이진 이미지 픽셀은 3가지 값으로 구성됨(205 - Unknown, 254 - move possible, 0 - 벽)
+	- ![[4F_1204.png | 200]]
+	
+- .yaml 파일 
+	- image 이름, mode, resolution, origin, negate, occupied_thresh, free_thresh
+- ROS에서 Map 파일 생성하는 코드 참조
+	- https://github.com/HaoQChen/map_server/blob/master/src/map_saver.cpp
+
+
+## 2024.02.26
+### ToDo
+- cloud data로 정합된 데이터를 Map으로 변환하는 법
+- 기존 Cartographer로 생성된 Map과 성능비교
+- Localization Net 성능 향상

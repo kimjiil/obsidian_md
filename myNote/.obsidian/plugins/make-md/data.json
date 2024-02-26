@@ -35,7 +35,11 @@
   "showRibbon": true,
   "deleteFileOption": "trash",
   "expandedSpaces": [
-    "/"
+    "/",
+    "//Spaces",
+    "//Spaces/Spaces/Home",
+    "//Spaces/Spaces/Home",
+    "//DeepMapping1"
   ],
   "expandFolderOnClick": true,
   "menuTriggerChar": "/",
