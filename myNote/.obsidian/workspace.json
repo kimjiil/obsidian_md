@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "2c3140ba8bdee7f6",
+        "id": "42c3d0a6c3981c26",
         "type": "tabs",
         "children": [
           {
-            "id": "e0b4b33f697ff5d7",
+            "id": "ac84ac6d744adebf",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -163,11 +163,13 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "e0b4b33f697ff5d7",
+  "active": "ac84ac6d744adebf",
   "lastOpenFiles": [
+    "오프라인 pip 설치.md",
+    ".md",
+    "점유 그리드 맵/Occupancy Grid Map.md",
     "점유 그리드 맵/Pasted image 20240226163253.png",
     "DeepMapping1/4F_1204.png",
-    "점유 그리드 맵/Occupancy Grid Map.md",
     "점유 그리드 맵",
     "DeepMapping1/DeepMapping1.md",
     "DeepMapping1/Pasted image 20240223113638.png",
@@ -180,9 +182,7 @@
     "Pasted image 20240221145511.png",
     "DeepMapping1/Pasted image 20240221145523.png",
     "Spaces/Home/Untitled.md",
-    "Spaces/Home/output_3_0.png",
     "Welcome.md",
-    "무제 파일.md",
     "Spaces/Home/무제 파일.md",
     "Spaces/Home",
     "Spaces",
