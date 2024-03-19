@@ -1,6 +1,6 @@
 # 논문
 ## 1. Introduction
-- 전형적인 Lidar 센서 localization 시스템은 보통 feature extraction module, feature matching algorithm, outlier rejection step, matching cost function, spatial searching, temporal optimization, filtering 매커니즘을 포함함
+- 전형적인 Lidar 센서 localization 시스템은 보통 feature extraction module, feature matching algorithm, outlier rejection step, matching cost function, spartial searching, temporal optimization, filtering 매커니즘을 포함함
 - global pose를 추정하기 위해 맵 기반 접근 방법들이 제안됨
 	- Barsan & wang [4] Lidar intentsity로부터 descriptor를 학습하고 사전에 구축된 intensity에 대해 descriptor를 매칭하여 relocalization을 하는 방법을 제안
 		- 지도를 구축하는 것이 어렵고 지도가 커질수록 컴퓨팅 복잡도가 크게 증가
@@ -143,4 +143,52 @@
 		- 여기서 $\beta$와 $\gamma$ 는 translation과 rotation을 같이 학습 하기 위한 balanced factor이고 $\beta_{0}$와 $\gamma_{0}$으로 초기화 됨
 		- $\log{q}$는 단위 quaternion $q=(u, v)$의 log 형태로 $u$는 스칼라 $v$는 3d vector 이는 다음과 같이 정의됨
 		- $$\log{q}=\begin{cases}  \frac{v}{||v||}cos^{-1}u, \;\; if \;\; ||v|| \neq 0 \\ 0, \quad\quad\quad\quad\;\, otherwise \end{cases}$$
-		- 
+## 5. Indoor Lidar Sensor Dataset for Relocalization
+
+
+# 실제 구현
+- Atloc 에 pointLoc에서 사용한 Loss함수가 있음, 중간 부분의 abs_loss만 사용하면 됨
+
+```Python
+class AtLocPlusCriterion(nn.Module):  
+    def __init__(self, t_loss_fn=nn.L1Loss(), q_loss_fn=nn.L1Loss(), sax=0.0, saq=0.0, srx=0.0, srq=0.0, learn_beta=False, learn_gamma=False):  
+        super(AtLocPlusCriterion, self).__init__()  
+        self.t_loss_fn = t_loss_fn  
+        self.q_loss_fn = q_loss_fn  
+        self.sax = nn.Parameter(torch.Tensor([sax]), requires_grad=learn_beta)  
+        self.saq = nn.Parameter(torch.Tensor([saq]), requires_grad=learn_beta)  
+        self.srx = nn.Parameter(torch.Tensor([srx]), requires_grad=learn_gamma)  
+        self.srq = nn.Parameter(torch.Tensor([srq]), requires_grad=learn_gamma)  
+  
+    def forward(self, pred, targ):  
+        # absolute pose loss  
+        s = pred.size()  
+        abs_loss = torch.exp(-self.sax) * self.t_loss_fn(pred.view(-1, *s[2:])[:, :3], targ.view(-1, *s[2:])[:, :3]) + self.sax + \  
+                   torch.exp(-self.saq) * self.q_loss_fn(pred.view(-1, *s[2:])[:, 3:], targ.view(-1, *s[2:])[:, 3:]) + self.saq  
+  
+        # get the VOs  
+        pred_vos = calc_vos_simple(pred)  
+        targ_vos = calc_vos_simple(targ)  
+  
+        # VO loss  
+        s = pred_vos.size()  
+        vo_loss = torch.exp(-self.srx) * self.t_loss_fn(pred_vos.view(-1, *s[2:])[:, :3], targ_vos.view(-1, *s[2:])[:, :3]) + self.srx + \  
+                  torch.exp(-self.srq) * self.q_loss_fn(pred_vos.view(-1, *s[2:])[:, 3:], targ_vos.view(-1, *s[2:])[:, 3:]) + self.srq  
+  
+        # total loss  
+        loss = abs_loss + vo_loss  
+        return loss
+```
+
+- \*.pose.txt 파일 취급
+	- $4 \times 4 \; matrix$ , homogenous coordinate
+	- $$ \begin{bmatrix}   m_{1} & m_{2} & m_{3} & m_{4} \\ m_{5} & m_{6} & m_{7} & m_{8} \\ m_{9} & m_{10} & m_{11} & m_{12} \\ 0 & 0 & 0 & 1 \end{bmatrix}$$
+	- 먼저 translation vector 추출 $[m_{4} \quad m_{8} \quad m_{12}]$ 
+	- Rotation matrix 추출 후 quanternion vector로 변환
+		- $$ \begin{bmatrix} m_{1} & m_{2} & m_{3} \\ m_{5} & m_{6} & m_{7} \\m_{9} & m_{10} & m_{11} \end{bmatrix} \rightarrow q = [q_{1} \quad q_{2} \quad q_{3} \quad q_{4}]$$
+		- 활동 범위를 반구(hemisphere)로 제한
+			- $np.sign(q_{1}) * [q_{1} \quad q_{2} \quad q_{3} \quad q_{4}]$ 
+		- logarithmic form으로 변경
+		- $$q'= \frac{[q_{2} \quad q_{3} \quad q_{4}]}{||[q_{2} \quad q_{3} \quad q_{4}]||_{2}} * cos^{-1}q_{1} =[q'_{2} \quad q'_{3} \quad q'_{4}]$$
+		- 최종 6-DOF pose는 다음과 같음
+			- $target\_pose = [m_{4} \quad m_{8} \quad m_{12} \quad q'_{2} \quad q'_{3} \quad q'_{4}]$ 
