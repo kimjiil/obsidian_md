@@ -145,6 +145,9 @@
 		- $$\log{q}=\begin{cases}  \frac{v}{||v||}cos^{-1}u, \;\; if \;\; ||v|| \neq 0 \\ 0, \quad\quad\quad\quad\;\, otherwise \end{cases}$$
 ## 5. Indoor Lidar Sensor Dataset for Relocalization
 
+## 6. Experiment
+- 추론의 정확도를 높이기 위해 다음 논문들의 data augmentation을 참고
+	- PoseNet[10], Geometric loss function for camera pose regression with deep learning[11], Geometry-aware learning of maps for camera localization[13], Atloc[17]
 
 # 실제 구현
 - Atloc 에 pointLoc에서 사용한 Loss함수가 있음, 중간 부분의 abs_loss만 사용하면 됨
