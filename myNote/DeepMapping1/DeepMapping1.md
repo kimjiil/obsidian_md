@@ -330,3 +330,35 @@ $$
 - cloud data로 정합된 데이터를 Map으로 변환하는 법
 - 기존 Cartographer로 생성된 Map과 성능비교
 - Localization Net 성능 향상
+
+## 2024.03.26
+강승미대리님한테 2가지 데이터 받음
+- Scan resolution 1cm로 mapping한 scan lidar data
+	- 1830개 scan data 
+- Scan resolution 5cm로 mapping한 scan lidar data
+	- 10542개 scan data
+
+### 실제 amr에 넣어서 테스트
+- 먼저 ~/sys_agv_v2/src/sybot/sybot_nav/maps 에 map file(.png)과 cofig file(.yaml) 넣기
+	- .yaml 파일에서 width, height는 이미지 크기 입력
+	- Image: 에는 .png파일 이름 입력
+	- resolution은 5cm면 0.05 / 1cm면 0.01
+	- origin은 Map의 원점 좌표(위치) 2D pose (x, y, yaw)
+		- 오른쪽 상단이 (0, 0)이므로 중앙을 원점으로 하고 싶으면 800 x 800이미지에서 resolution 0.05이면
+		- $800 \times 0.05 = 40m$ 이므로 중앙은 오른쪽 상단에서부터 x축으로 -20m y축으로 -20m이므로 origin은 (-20, -20, 0)
+	- occupied_thresh : 임계값보다 큰 점유를 가진 픽셀은 점유 상태로 확인
+	- free_thresh : 점유값이 임계값보다 작은 픽셀은 비어있는 상태로 확인
+	- negate : white / black free / occupied semantics가 반전전되어야하는지 여부
+- 맵파일을 넣은 이후 다음 명령어로 build
+```bash
+colcon build --packages-select sybot_nav
+```
+- 이후 go 명령어를 통해 실행, amr에 go 명령어는 다음 명렁어로 alias되있음
+```bash
+ros2 launch sybot_nav sybot_nav_launch.py	 
+```
+- sybot_nav는 MongoDB에서 run_mode를 읽어와서 mapping mode이면 sybot_mapping_launch.py를 실행하고 아니면 sybot_auto_launch.py를 실행함
+![[Pasted image 20240326135353.png]]
+
+- DB의 current_map 부분을 수정
+![[Pasted image 20240326143632.png]]

@@ -13,9 +13,19 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "FusionLoc/PointLoc.md",
+                "file": "ROS2 기타/데이터 수집하는 방법/4가지 데이터 (이미지, scan, twist, pose) 받아서 저장하는방법.md",
                 "mode": "source",
                 "source": false
+              }
+            }
+          },
+          {
+            "id": "9ddcd46316f84bdb",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.5.12"
               }
             }
           }
@@ -73,12 +83,11 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 244.5
+    "width": 200
   },
   "right": {
     "id": "e24d0222f4a0ca9e",
@@ -94,7 +103,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "FusionLoc/PointLoc.md",
+                "file": "ROS2 기타/데이터 수집하는 방법/4가지 데이터 (이미지, scan, twist, pose) 받아서 저장하는방법.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -111,7 +120,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "FusionLoc/PointLoc.md",
+                "file": "ROS2 기타/데이터 수집하는 방법/4가지 데이터 (이미지, scan, twist, pose) 받아서 저장하는방법.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -134,7 +143,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "FusionLoc/PointLoc.md"
+                "file": "ROS2 기타/데이터 수집하는 방법/4가지 데이터 (이미지, scan, twist, pose) 받아서 저장하는방법.md"
               }
             }
           },
@@ -166,26 +175,31 @@
   },
   "active": "ac84ac6d744adebf",
   "lastOpenFiles": [
-    "FusionLoc/Pasted image 20240315104338.png",
-    "FusionLoc/Pasted image 20240314185946.png",
-    "awesome-point-cloud-registration.md",
     "FusionLoc/PointLoc.md",
-    "FusionLoc/Pasted image 20240315103638.png",
-    "FusionLoc/Pasted image 20240315102519.png",
-    "FusionLoc/Pasted image 20240314144424.png",
-    "FusionLoc/Pasted image 20240314185825.png",
-    "FusionLoc/Pasted image 20240314134912.png",
+    "ROS2 기타/데이터 수집하는 방법/4가지 데이터 (이미지, scan, twist, pose) 받아서 저장하는방법.md",
+    "ROS2 기타/데이터 수집하는 방법",
+    "ROS2 기타/무제 파일.md",
+    "ROS2 기타",
+    "FusionLoc/FusionLoc.md",
+    "FusionLoc/test 1.png",
+    "FusionLoc/test.png",
     "FusionLoc/AtLoc.md",
-    "FusionLoc",
-    "DeepMapping1/DeepMapping1.md",
+    "업무용 메모장.md",
+    "plot.png",
+    "FusionLoc/plot 5.png",
+    "FusionLoc/plot 4.png",
+    "FusionLoc/plot 3.png",
     "오프라인 pip 설치.md",
+    "FusionLoc/plot 1.png",
+    "FusionLoc/plot 2.png",
+    "FusionLoc/Pasted image 20240327171223.png",
+    "FusionLoc/Pasted image 20240327170714.png",
+    "awesome-point-cloud-registration.md",
     "점유 그리드 맵/Occupancy Grid Map.md",
+    "DeepMapping1/DeepMapping1.md",
+    "FusionLoc",
     ".md",
-    "점유 그리드 맵/Pasted image 20240226163253.png",
-    "DeepMapping1/4F_1204.png",
     "점유 그리드 맵",
-    "DeepMapping1/Pasted image 20240223113638.png",
-    "DeepMapping1/Pasted image 20240223113559.png",
     "DeepMapping2/DeepMapping2.md",
     "Spaces/Home/Untitled.md",
     "Welcome.md",

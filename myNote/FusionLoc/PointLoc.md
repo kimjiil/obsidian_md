@@ -195,3 +195,85 @@ class AtLocPlusCriterion(nn.Module):
 		- $$q'= \frac{[q_{2} \quad q_{3} \quad q_{4}]}{||[q_{2} \quad q_{3} \quad q_{4}]||_{2}} * cos^{-1}q_{1} =[q'_{2} \quad q'_{3} \quad q'_{4}]$$
 		- 최종 6-DOF pose는 다음과 같음
 			- $target\_pose = [m_{4} \quad m_{8} \quad m_{12} \quad q'_{2} \quad q'_{3} \quad q'_{4}]$ 
+
+# Training
+## 2024_0326_1646_54
+- Adam lr = 0.001 
+- 사용한 transforms
+- ![[Pasted image 20240326164916.png]]
+
+- training loss와 valid loss를 보면 잘 줄어 드는 것처럼 보이지만 실제로 rotation_error와 translation_error를 보면 이상하게 진동하고 있음.
+![[plot.png]]
+
+- 확인해야 할 사항
+	- 들어가는 training data를 normalize 해줘야 하는지?
+	- 나오는 결과물에 대해서 rotation pose가 제대로 변환된건지?
+		- quaternion 변환시 오류 있는지 확인
+
+## 2024_0327_1652_46
+- 모든 transforms 빼고 학습
+- ![[Pasted image 20240327170714.png]]
+
+## 2024_0327_1710_35
+- PointLocLoss(-3, -3)넣고 시작 
+- 모든 transfomrs 뺌
+- ![[Pasted image 20240327171223.png]]
+
+## 2024_0327_1814_02
+- Group all layer의 mlp 구조에서 batchnorm1d 와 dropout을 뺌
+- point loc loss (-3, -3) 넣고 시작
+- 모든 transforms 뺌
+
+- 결론
+	- 이전에 valid와 train과 벌어지면서 학습이 안되는 현상은 해결이 됨..
+
+## 2024_0327_1902_35
+- Group all layer의 mlp 구조에서 batchnorm1d 와 dropout을 뺌
+- point loc loss(b=0, g=-3) 넣고 시작
+- 모든 transforms 뺌 ![[plot 1.png]]
+- 결과 
+	- Epoch 796에 rotation error 9도 / trans error 0.21m
+
+## 2024_0328_1131_13
+- Group all layer의 mlp 구조에서 batchnorm1d 와 dropout을 뺌
+- point loc loss(b=0, g=-3) 넣고 시작
+- transform 추가
+	- Random jitter
+	- Random Rotation
+	- Random Translation
+![[plot 5.png]]
+## 2024_0328_1316_57
+- Group all layer의 mlp에서 batchnorm1d 추가
+- Point loc loss(b=0, g=-3)
+- transforms
+	- Random Jitter
+- PoseRegressor에서 Dropout 뺌
+![[plot 4.png]]
+## 2024_0328_1846_10
+- Group all layer의 mlp에서 batchnorm1d 추가
+- Point loc loss(b=0, g=-3)
+- transforms
+	- Random Jitter
+- PoseRegressor에서 Dropout 뺌
+- PoseRegressor의 translation_mlp, rotation_mlp의 LeakyRelu의 negative_slope를 0.02로 조정함
+- GroupAll Layers Module의 ReLU를 Leaky ReLu로 수정함
+![[plot 3.png]]
+## 2024_0329_1326_30
+- Group all layer의 mlp에서 batchnorm1d 추가
+- Point loc loss(b=0, g=-3)
+- transforms
+	- Random Jitter
+- PoseRegressor에서 Dropout 뺌
+- PoseRegressor의 translation_mlp, rotation_mlp의 LeakyRelu의 negative_slope를 0.02로 조정함
+- GroupAll Layers Module의 ReLU를 Leaky ReLu로 수정함
+- scheduler steplr 사용
+
+## 2024_0329_1854_06
+- Group all layer의 mlp에서 batchnorm1d 추가
+- Point loc loss(b=0, g=-3)
+- transforms
+	- Random Jitter
+- PoseRegressor에서 Dropout 뺌
+- PoseRegressor의 translation_mlp, rotation_mlp의 LeakyRelu의 negative_slope를 0.02에서 0.4로 조정함
+- GroupAll Layers Module의 ReLU를 Leaky ReLu로 수정함
+- scheduler steplr 사용
