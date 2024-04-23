@@ -22,7 +22,7 @@
 - 전역 등록을 point cloud 기반의 PoseNet[24] (L-net)에 캡슐화 하고 이를 BCE Loss를 사용하여 맵 품질을 평가하는 다른 binary occupancy network (M-net)으로 변환한다. 이는 연속적인 맵 최적화를 이진 분류인 self-supervised 학습으로 변환한다. 테스트가 필요하지 않기 때문에 훈련이 완료되면 매핑이 한번 수행되기 때문에 일반화 문제에 직면하지 않는다.
 - 하지만 작은 데이터셋에서 매우 좋은 성능에도 불구하고 Deepmapping은 다음과 같은 이유로 큰 데이터셋에서 실패했다.
 	1) No-explicit-loop-closure : DeepMapping은 각 미니 배치의 프레임을 시간적 이웃으로 사용하여 L-Net을 점진적으로 최적하고, 전역 맵 일관성을 제어하기 위해 M-Net에만 의존한다. 이는 frame 수가 많을 때 drift하게 되는 incremental registraion과 유사하다. SLAM은 루프 클로징에 의해 이 문제를 해결하며, DeepMapping에 어떻게 통할할지는 아직 명확하지 않다.
-	2) No-local-registration : 이전 연구들[25-28]은 local registration이 부분적으로 정확하다는 것을 보여 주었지만, DeepMapping은 이 local-registratio을 ICP기반의 pose 초기화에서만 사용하고 최적화 과정에ㅅ는 사용하지 않는다. 이는 모든 lidar registration 방법이 직면하는 일반적인 문제로, lidar point cloud에서의 point 대응 부족으로 인한 것이다. 희소한 센서 해상도와 장거리 감지로 인해 동일한 3D point가 다른 scan에서 다시 등장하는 경우가 매우 드뭄
+	2) No-local-registration : 이전 연구들[25-28]은 local registration이 부분적으로 정확하다는 것을 보여 주었지만, DeepMapping은 이 local-registration을 ICP기반의 pose 초기화에서만 사용하고 최적화 과정에는 사용하지 않는다. 이는 모든 lidar registration 방법이 직면하는 일반적인 문제로, lidar point cloud에서의 point 대응 부족으로 인한 것이다. 희소한 센서 해상도와 장거리 감지로 인해 동일한 3D point가 다른 scan에서 다시 등장하는 경우가 매우 드뭄
 	3) Slow-convergence-in-global-registration : L-Net은 하나의 point cloud의 frame으로 global pose를 예측하며, 이는 오직 M-Net과 BCE Loss에 의해서 지도(supervised)된다. 이와 다르게 global registration은 올바른 pose를 출력하기에 충분한 추론 힌트가 부족하므로, 데이터셋이 클때 수렴이 느려짐
 - 대규모 lidar 데이터셋에서 맵을 효과적으로 최적화할 수 있는 DeepMapping2를 제안한다. 이는 2가지 새로운 기술로 DeepMapping을 확장한다.
 	1) 동일한 배치에 topology/공간적 이웃과 함께 frame을 그룹화함으로써 루프 클로징의 맵 토폴로지를 기반으로 데이터 프레임을 조직화하여 문제(1)을 해결합니다. 이는 free-space 불일치성을 사용하여 M-Net과 BCE loss를 통해 self-supervision을 생성하기 위한 딥매핑에 루프 클로징을 추가하는 가장 좋은 방법으로 판단된다. 왜냐하면 이러한 불일치성은 등록되지 않는 인접 프레임 사이에서 발생하기 때문입니다.

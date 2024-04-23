@@ -4,28 +4,18 @@
     "type": "split",
     "children": [
       {
-        "id": "42c3d0a6c3981c26",
+        "id": "fba991edad0b0fd5",
         "type": "tabs",
         "children": [
           {
-            "id": "ac84ac6d744adebf",
+            "id": "0db65baa17625aff",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "ROS2 기타/데이터 수집하는 방법/4가지 데이터 (이미지, scan, twist, pose) 받아서 저장하는방법.md",
+                "file": "Cartographer/Real-Time Loop Closure in 2D LIDAR SLAM.md",
                 "mode": "source",
                 "source": false
-              }
-            }
-          },
-          {
-            "id": "9ddcd46316f84bdb",
-            "type": "leaf",
-            "state": {
-              "type": "release-notes",
-              "state": {
-                "currentVersion": "1.5.12"
               }
             }
           }
@@ -103,7 +93,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "ROS2 기타/데이터 수집하는 방법/4가지 데이터 (이미지, scan, twist, pose) 받아서 저장하는방법.md",
+                "file": "Cartographer/Real-Time Loop Closure in 2D LIDAR SLAM.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -120,7 +110,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "ROS2 기타/데이터 수집하는 방법/4가지 데이터 (이미지, scan, twist, pose) 받아서 저장하는방법.md",
+                "file": "Cartographer/Real-Time Loop Closure in 2D LIDAR SLAM.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -143,7 +133,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "ROS2 기타/데이터 수집하는 방법/4가지 데이터 (이미지, scan, twist, pose) 받아서 저장하는방법.md"
+                "file": "Cartographer/Real-Time Loop Closure in 2D LIDAR SLAM.md"
               }
             }
           },
@@ -173,44 +163,52 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "ac84ac6d744adebf",
+  "active": "0db65baa17625aff",
   "lastOpenFiles": [
-    "FusionLoc/PointLoc.md",
+    "Cartographer/Pasted image 20240422104142.png",
+    "개인용/자기소개.md",
+    "업무/2024년 4월/4월 3주차/4월 3주차.md",
+    "개인용",
+    "업무/2024년 4월/4월 2주차/4월 2주차.md",
+    "업무/2024년 4월/4월 3주차",
+    "DeepMapping1/DeepMapping1.md",
+    "DeepMapping2/DeepMapping2.md",
+    "Cartographer/Real-Time Loop Closure in 2D LIDAR SLAM.md",
+    "AMR ROS2 Info/amr ros2 launch list.md",
+    "Cartographer",
+    "AMR ROS2 Info",
+    "점유 그리드 맵/Occupancy Grid Map.md",
     "ROS2 기타/데이터 수집하는 방법/4가지 데이터 (이미지, scan, twist, pose) 받아서 저장하는방법.md",
+    "업무용 메모장.md",
+    "오프라인 pip 설치.md",
+    "awesome-point-cloud-registration.md",
+    "점유 그리드 맵/Pasted image 20240226163253.png",
+    "업무/2024년 4월/4월 1주차/4월 1주차.md",
+    "FusionLoc/PointLoc.md",
+    "업무/2024년 4월/4월 2주차/Pasted image 20240408174018.png",
+    "업무/2024년 4월/4월 1주차",
+    "업무/2024년 4월/4월 2주차",
+    "4월 2주차",
+    "업무/2024년 4월/4월 1주차/Pasted image 20240405163405.png",
+    "업무/2024년 4월/4월 1주차/2024_0404_1446_51.png",
+    "업무/2024년 4월/4월 1주차/2024_0404_1446_51_rs0.05.png",
+    "FusionLoc/plot 4.png",
+    "업무/2024년 4월",
+    "업무",
+    "plot.png",
     "ROS2 기타/데이터 수집하는 방법",
     "ROS2 기타/무제 파일.md",
-    "ROS2 기타",
     "FusionLoc/FusionLoc.md",
     "FusionLoc/test 1.png",
     "FusionLoc/test.png",
     "FusionLoc/AtLoc.md",
-    "업무용 메모장.md",
-    "plot.png",
     "FusionLoc/plot 5.png",
-    "FusionLoc/plot 4.png",
-    "FusionLoc/plot 3.png",
-    "오프라인 pip 설치.md",
-    "FusionLoc/plot 1.png",
-    "FusionLoc/plot 2.png",
-    "FusionLoc/Pasted image 20240327171223.png",
-    "FusionLoc/Pasted image 20240327170714.png",
-    "awesome-point-cloud-registration.md",
-    "점유 그리드 맵/Occupancy Grid Map.md",
-    "DeepMapping1/DeepMapping1.md",
-    "FusionLoc",
-    ".md",
-    "점유 그리드 맵",
-    "DeepMapping2/DeepMapping2.md",
     "Spaces/Home/Untitled.md",
     "Welcome.md",
     "Spaces/Home/무제 파일.md",
-    "Spaces/Home",
-    "Spaces",
     "3.md",
     "[3].md",
     "45], [52], [49], [20], [19], [29], [18.md",
-    "[45.md",
-    "DeepMapping1",
-    "DeepMapping2"
+    "[45.md"
   ]
 }

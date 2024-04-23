@@ -277,3 +277,12 @@ class AtLocPlusCriterion(nn.Module):
 - PoseRegressor의 translation_mlp, rotation_mlp의 LeakyRelu의 negative_slope를 0.02에서 0.4로 조정함
 - GroupAll Layers Module의 ReLU를 Leaky ReLu로 수정함
 - scheduler steplr 사용
+## 2024_0401_1236_55
+- Group all layer의 mlp에서 batchnorm1d 추가
+- Point loc loss(b=0, g=-3)
+- transforms
+	- Random Jitter
+- PoseRegressor에서 Dropout 뺌
+- PoseRegressor의 translation_mlp, rotation_mlp의 LeakyRelu의 negative_slope를 0.4에서 0.1로 조정함
+- GroupAll Layers Module의 ReLU를 Leaky ReLu로 수정함
+- scheduler steplr 사용
